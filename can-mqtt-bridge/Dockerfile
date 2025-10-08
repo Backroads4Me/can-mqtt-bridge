@@ -21,6 +21,7 @@ RUN apk add --no-cache \
     procps \
     coreutils \
     jq \
+    s6-overlay \
     python3 \
     openssl \
     ca-certificates

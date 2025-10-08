@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/usr/bin/with-contenv bashio
 # CAN to MQTT Bridge Main Script
 
 set -e
