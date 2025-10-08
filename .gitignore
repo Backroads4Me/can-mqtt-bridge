@@ -1,0 +1,44 @@
+# Claude Code
+.claude/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS files
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+.deleteme*
+
+# Build artifacts
+*.tar.gz
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.env
+.env.local
+secrets/
