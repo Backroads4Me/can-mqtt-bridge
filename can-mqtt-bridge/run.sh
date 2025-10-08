@@ -77,27 +77,6 @@ validate_config() {
     return 0
 }
 
-# ========================
-# CAN Interface Validation (after initialization)
-# ========================
-validate_can_interface() {
-    bashio::log.info "Validating CAN interface after initialization..."
-
-    # Check if CAN interface exists using specific interface name
-    if ! ip link show "$CAN_INTERFACE" >/dev/null 2>&1; then
-        bashio::log.fatal "CAN interface $CAN_INTERFACE does not exist after initialization"
-        return 1
-    fi
-
-    # Verify interface is operational
-    if ! ip link show "$CAN_INTERFACE" | grep -q "UP"; then
-        bashio::log.fatal "CAN interface $CAN_INTERFACE is not in UP state"
-        return 1
-    fi
-
-    bashio::log.info "✅ CAN interface validation passed"
-    return 0
-}
 
 # ========================
 # Health Check Function
@@ -203,8 +182,14 @@ ip link show "$CAN_INTERFACE"
 bashio::log.info "✅ CAN interface $CAN_INTERFACE initialized successfully at ${CAN_BITRATE} bps"
 
 # ========================
-# MQTT Connection Test
+# Configuration & MQTT Connection Test
 # ========================
+# Run configuration validation
+if ! validate_config; then
+    bashio::log.fatal "Configuration validation failed. Exiting."
+    exit 1
+fi
+
 bashio::log.info "Testing MQTT connection..."
 
 MQTT_AUTH_ARGS=""
@@ -216,18 +201,6 @@ if mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" $MQTT_AUTH_ARGS \
     bashio::log.info "✅ MQTT connection successful"
 else
     bashio::log.fatal "❌ MQTT connection failed - check broker settings and credentials"
-    exit 1
-fi
-
-# Run configuration validation
-if ! validate_config; then
-    bashio::log.fatal "Configuration validation failed. Exiting."
-    exit 1
-fi
-
-# Run CAN interface validation after initialization
-if ! validate_can_interface; then
-    bashio::log.fatal "CAN interface validation failed. Exiting."
     exit 1
 fi
 

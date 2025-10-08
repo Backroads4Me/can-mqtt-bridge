@@ -1,74 +1,6 @@
-<div align="center">
-
-<img src="can-mqtt-bridge/can-mqtt-bridge-logo.svg" alt="CAN to MQTT Bridge Logo" width="200"/>
-
 # CAN to MQTT Bridge
 
-![GitHub release](https://img.shields.io/github/v/release/Backroads4Me/can-mqtt-bridge?display_name=tag&sort=semver)
-![GitHub issues](https://img.shields.io/github/issues/Backroads4Me/can-mqtt-bridge)
-![License](https://img.shields.io/github/license/Backroads4Me/can-mqtt-bridge?logo=github&cacheSeconds=60)
-![Home Assistant](https://img.shields.io/badge/Home%20Assistant-compatible-blue)
-
 A Home Assistant add-on that initializes CAN interfaces and provides bidirectional bridging to MQTT.
-
-</div>
-
-## Author
-
-Created and maintained by Ted Lanham ([@Backroads4Me](https://github.com/Backroads4Me))
-
-Questions or issues? Open an issue on GitHub or contact tedlanham@gmail.com
-
-## Why Use This?
-
-- **Seamless Integration**: Bridge your CAN bus devices directly into Home Assistant via MQTT
-- **Versatile Applications**: Perfect for RV automation, automotive diagnostics, industrial equipment monitoring, and IoT projects
-- **Zero Configuration**: Automatic MQTT broker discovery and simple setup process
-- **Robust & Reliable**: Built-in health checks, automatic reconnection, and process monitoring
-
-## Features
-
-- **CAN Interface Initialization**: Automatically configures and brings up CAN interfaces
-- **Bidirectional Bridge**: CAN ↔ MQTT message bridging
-- **Robust Error Handling**: Automatic reconnection on connection loss
-- **Configurable Topics**: Customize MQTT topics for different message types
-- **Status Monitoring**: Real-time bridge status via MQTT
-- **Debug Logging**: Optional verbose logging for troubleshooting
-- **Service Discovery**: Automatic MQTT broker detection
-- **Web Interface**: Built-in status monitoring via Home Assistant ingress
-
-## Installation
-
-### Quick Installation (One-Click)
-
-Click the button below to add this repository to your Home Assistant instance:
-
-[![Add repository to Home Assistant](https://raw.githubusercontent.com/Smeagolworms4/donate-assets/master/addon-ha.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2FBackroads4Me%2Fcan-mqtt-bridge)
-
-After adding the repository, the "CAN to MQTT Bridge" add-on will appear in your Add-on Store. Click on it and then click **Install**.
-
-### Manual Installation
-
-If you prefer to add the repository manually:
-
-1.  Navigate to the Add-on Store in Home Assistant:
-
-    - Go to **Settings** > **Add-ons**.
-    - Click on the **Add-on Store** button in the bottom right.
-
-2.  Add the repository URL:
-
-    - Click the vertical ellipsis (⋮) in the top right corner and select **Repositories**.
-    - Paste the following URL and click **Add**:
-
-    ```
-    https://github.com/Backroads4Me/can-mqtt-bridge
-    ```
-
-3.  Install the add-on:
-    - Close the repository management window.
-    - The "CAN to MQTT Bridge" add-on will now be available in the store.
-    - Click on it and then click **Install**.
 
 ## Configuration
 
@@ -123,26 +55,6 @@ Monitor bridge status (replace credentials as needed):
 mosquitto_sub -h localhost -t can/status -u canbus -P ha_can_mqtt_bridge
 ```
 
-## Logging
-
-The add-on provides comprehensive logging through:
-
-1. **Home Assistant Logs**: Available in the add-on log viewer
-2. **MQTT Status Messages**: Published to the `can/status` topic
-
-Logs include:
-
-- CAN interface initialization status
-- MQTT connection status
-- Bridge process monitoring
-- CAN frame transmission details (when debug logging enabled)
-- Error messages and reconnection attempts
-
-Status messages published to MQTT:
-
-- `bridge_online`: Bridge is running
-- `bridge_offline`: Bridge has stopped
-
 ## CAN Frame Format
 
 The add-on supports two CAN frame formats:
@@ -168,17 +80,25 @@ For convenience, the add-on automatically converts raw hex strings to the standa
 
 This allows seamless integration with systems that send CAN frames as continuous hex strings.
 
-## Requirements
+## Logging
 
-### Hardware
+The add-on provides comprehensive logging through:
 
-- CAN interface hardware (CAN HAT, USB-CAN adapter, etc.)
-- Properly configured CAN interface in Home Assistant OS
+1. **Home Assistant Logs**: Available in the add-on log viewer
+2. **MQTT Status Messages**: Published to the `can/status` topic
 
-### Software
+Logs include:
 
-- Home Assistant OS with CAN support enabled
-- MQTT broker (Mosquitto add-on recommended)
+- CAN interface initialization status
+- MQTT connection status
+- Bridge process monitoring
+- CAN frame transmission details (when debug logging enabled)
+- Error messages and reconnection attempts
+
+Status messages published to MQTT:
+
+- `bridge_online`: Bridge is running
+- `bridge_offline`: Bridge has stopped
 
 ## Troubleshooting
 
@@ -216,22 +136,19 @@ This allows seamless integration with systems that send CAN frames as continuous
 
 Enable `debug_logging: true` in configuration for verbose output.
 
-### Security Options
+## Requirements
 
-The add-on provides several security features:
+### Hardware
 
-- **SSL**: Enable secure MQTT connections with `ssl: true`
-- **Password Protection**: Set `password` to restrict access to the web interface
-- **AppArmor**: Container isolation for improved security
-- **Ingress**: Access the web interface securely through Home Assistant
+- CAN interface hardware (CAN HAT, USB-CAN adapter, etc.)
+- Properly configured CAN interface in Home Assistant OS
+
+### Software
+
+- Home Assistant OS with CAN support enabled
+- MQTT broker (Mosquitto add-on recommended)
 
 ## Home Assistant Integration
-
-The add-on integrates with Home Assistant in several ways:
-
-### Integration Features
-
-The add-on integrates with Home Assistant through:
 
 ### Service Discovery
 
@@ -241,7 +158,7 @@ The add-on uses Home Assistant's service discovery to automatically find and con
 
 Access the add-on's status page directly through Home Assistant's UI using the Ingress feature, providing a secure way to monitor the CAN bridge without exposing additional ports.
 
-## Health Checks
+### Health Checks
 
 The add-on includes automatic health monitoring that:
 
@@ -252,6 +169,15 @@ The add-on includes automatic health monitoring that:
 - Reports status via MQTT topics (`can/status`)
 - Provides process monitoring with automatic cleanup on failure
 
+## Security Options
+
+The add-on provides several security features:
+
+- **SSL**: Enable secure MQTT connections with `ssl: true`
+- **Password Protection**: Set `password` to restrict access to the web interface
+- **AppArmor**: Container isolation for improved security
+- **Ingress**: Access the web interface securely through Home Assistant
+
 ---
 
-Built with ❤️ for Home Assistant
+For more information, visit the [GitHub repository](https://github.com/Backroads4Me/can-mqtt-bridge).
