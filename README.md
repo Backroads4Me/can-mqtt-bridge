@@ -4,7 +4,7 @@
 
 # CAN to MQTT Bridge
 
-![GitHub release](https://img.shields.io/github/v/release/Backroads4Me/can-mqtt-bridge)
+![GitHub release](https://img.shields.io/github/v/release/Backroads4Me/can-mqtt-bridge?display_name=tag&sort=semver)
 ![GitHub issues](https://img.shields.io/github/issues/Backroads4Me/can-mqtt-bridge)
 ![License](https://img.shields.io/github/license/Backroads4Me/can-mqtt-bridge)
 ![Home Assistant](https://img.shields.io/badge/Home%20Assistant-compatible-blue)
