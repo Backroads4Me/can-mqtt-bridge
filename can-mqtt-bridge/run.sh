@@ -144,6 +144,12 @@ bashio::log.info "CAN Interface: $CAN_INTERFACE @ ${CAN_BITRATE} bps"
 bashio::log.info "MQTT Broker: $MQTT_HOST:$MQTT_PORT"
 bashio::log.info "MQTT User: ${MQTT_USER:-'(none)'}"
 bashio::log.info "Topics - Raw: $MQTT_TOPIC_RAW, Send: $MQTT_TOPIC_SEND, Status: $MQTT_TOPIC_STATUS"
+bashio::log.info "Debug Logging: ${DEBUG_LOGGING}"
+if [ "$DEBUG_LOGGING" = "true" ]; then
+    bashio::log.info "Verbose debug logging is ENABLED"
+else
+    bashio::log.info "Verbose debug logging is disabled"
+fi
 echo
 
 # ========================
@@ -213,11 +219,9 @@ fi
 bashio::log.info "Starting CAN->MQTT bridge..."
 {
     while true; do
-        log_debug "Starting CAN->MQTT bridge connection"
         candump -L "$CAN_INTERFACE" 2>/dev/null | awk '{print $3}' | \
         while IFS= read -r frame; do
             if [ -n "$frame" ]; then
-                log_debug "CAN->MQTT: $frame"
                 echo "$frame"
             fi
         done | mosquitto_pub -h "$MQTT_HOST" -p "$MQTT_PORT" $MQTT_AUTH_ARGS \
@@ -382,8 +386,8 @@ while true; do
         exit 1
     fi
 
-    # Log process health every 5 minutes for basic monitoring
-    if [ $(($(date +%s) % 300)) -eq 0 ]; then
+    # Log process health every hour for basic monitoring
+    if [ $(($(date +%s) % 3600)) -eq 0 ]; then
         bashio::log.info "Process monitor: CAN->MQTT (PID: $CAN_TO_MQTT_PID), MQTT->CAN (PID: $MQTT_TO_CAN_PID) - all healthy"
     fi
 
