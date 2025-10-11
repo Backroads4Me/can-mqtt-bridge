@@ -90,15 +90,6 @@ update_health_check() {
 
 
 # ========================
-# Logging Functions
-# ========================
-log_debug() {
-    if [ "$DEBUG_LOGGING" = "true" ]; then
-        bashio::log.debug "$1"
-    fi
-}
-
-# ========================
 # Cleanup Function
 # ========================
 cleanup() {
@@ -238,12 +229,12 @@ bashio::log.info "✅ CAN->MQTT bridge started (PID: $CAN_TO_MQTT_PID)"
 bashio::log.info "Starting MQTT->CAN bridge..."
 {
     while true; do
-        log_debug "Starting MQTT->CAN bridge connection"
+        [ "$DEBUG_LOGGING" = "true" ] && bashio::log.info "[DEBUG] Starting MQTT->CAN bridge connection"
         mosquitto_sub -h "$MQTT_HOST" -p "$MQTT_PORT" $MQTT_AUTH_ARGS \
                       -t "$MQTT_TOPIC_SEND" -q 1 2>/dev/null | \
         while IFS= read -r message; do
             if [ -n "$message" ]; then
-                log_debug "MQTT->CAN received: $message"
+                [ "$DEBUG_LOGGING" = "true" ] && bashio::log.info "[DEBUG] MQTT->CAN received: $message"
 
                 # Convert frame format if needed (from raw hex to ID#DATA format)
                 if [[ "$message" =~ ^[0-9A-Fa-f]+$ ]] && [[ ${#message} -gt 8 ]]; then
@@ -266,7 +257,7 @@ bashio::log.info "Starting MQTT->CAN bridge..."
                     fi
 
                     formatted_message="${can_id}#${can_data}"
-                    log_debug "Converted: $message -> $formatted_message"
+                    [ "$DEBUG_LOGGING" = "true" ] && bashio::log.info "[DEBUG] Converted: $message -> $formatted_message"
                 else
                     # Check if it's already in ID#DATA format but needs CAN ID padding
                     if [[ "$message" =~ ^[0-9A-Fa-f]+#[0-9A-Fa-f]*$ ]]; then
@@ -278,7 +269,7 @@ bashio::log.info "Starting MQTT->CAN bridge..."
                         if [ ${#existing_id} -eq 7 ]; then
                             padded_id="0${existing_id}"
                             formatted_message="${padded_id}#${existing_data}"
-                            log_debug "Padded CAN ID: $message -> $formatted_message"
+                            [ "$DEBUG_LOGGING" = "true" ] && bashio::log.info "[DEBUG] Padded CAN ID: $message -> $formatted_message"
                         else
                             formatted_message="$message"
                         fi
@@ -290,7 +281,7 @@ bashio::log.info "Starting MQTT->CAN bridge..."
 
                 # Send with error logging
                 if cansend_output=$(cansend "$CAN_INTERFACE" "$formatted_message" 2>&1); then
-                    log_debug "Successfully sent CAN frame: $formatted_message"
+                    [ "$DEBUG_LOGGING" = "true" ] && bashio::log.info "[DEBUG] Successfully sent CAN frame: $formatted_message"
                 else
                     bashio::log.error "Failed to send CAN frame: $formatted_message"
                     bashio::log.error "Error details: $cansend_output"
